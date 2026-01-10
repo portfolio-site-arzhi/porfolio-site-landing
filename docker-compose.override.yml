@@ -1,0 +1,16 @@
+services:
+  portfolio_site_landing:
+    restart: "no"
+    networks:
+      - global_portfolio_site_network
+
+  portfolio_site_landing_nginx:
+    restart: "no"
+    ports:
+      - "3000:80"
+    networks:
+      - global_portfolio_site_network
+
+networks:
+  global_portfolio_site_network:
+    external: true

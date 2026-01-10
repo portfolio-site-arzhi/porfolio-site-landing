@@ -38,11 +38,14 @@
       <v-col cols="12" md="6" class="text-center">
         <v-scale-transition appear>
           <v-avatar size="300" class="elevation-10">
-            <v-img
+            <img
               :src="profile.avatar"
               alt="Profile Avatar"
-              cover
-            />
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              style="width: 100%; height: 100%; object-fit: cover; display: block;"
+            >
           </v-avatar>
         </v-scale-transition>
       </v-col>

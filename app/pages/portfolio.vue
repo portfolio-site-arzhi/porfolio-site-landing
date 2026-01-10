@@ -17,18 +17,23 @@
           class="motion-in"
           :style="{ '--enter-delay': `${index * 40}ms` }"
         >
-          <v-hover v-slot="{ isHovering, props }">
-            <v-card
-              v-bind="props"
-              :elevation="isHovering ? 12 : 2"
-              class="h-100 transition-swing motion-lift"
-              :to="`/portfolio/${project.slug}`"
+          <v-card
+            elevation="2"
+            class="h-100 transition-swing motion-lift"
+            role="link"
+            tabindex="0"
+            @click="navigateTo(`/portfolio/${project.slug}`)"
+            @keydown.enter.prevent="navigateTo(`/portfolio/${project.slug}`)"
+            @keydown.space.prevent="navigateTo(`/portfolio/${project.slug}`)"
+          >
+            <img
+              :src="project.image"
+              :alt="project.title"
+              :loading="index < 3 ? 'eager' : 'lazy'"
+              :fetchpriority="index === 0 ? 'high' : 'auto'"
+              decoding="async"
+              style="width: 100%; height: 200px; object-fit: cover; display: block;"
             >
-              <v-img
-                :src="project.image"
-                height="200"
-                cover
-              />
 
               <v-card-title>{{ project.title }}</v-card-title>
 
@@ -68,10 +73,9 @@
 
               <v-card-actions>
                 <v-btn
-                  :to="`/portfolio/${project.slug}`"
                   color="primary"
                   variant="tonal"
-                  @click.stop
+                  @click.stop="navigateTo(`/portfolio/${project.slug}`)"
                 >
                   Details
                 </v-btn>
@@ -95,8 +99,7 @@
                   Visit
                 </v-btn>
               </v-card-actions>
-            </v-card>
-          </v-hover>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>

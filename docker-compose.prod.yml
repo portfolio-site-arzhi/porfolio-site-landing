@@ -1,0 +1,22 @@
+name: portfolio_site_landing_prod
+
+services:
+  portfolio_site_landing:
+    container_name: portfolio_site_landing_prod
+    restart: "always"
+    networks:
+      - global_portfolio_site_network_prod
+
+  portfolio_site_landing_nginx:
+    container_name: portfolio_site_landing_nginx_prod
+    restart: "always"
+    ports:
+      - "3000:80"
+    volumes:
+      - ./docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - global_portfolio_site_network_prod
+
+networks:
+  global_portfolio_site_network_prod:
+    external: true

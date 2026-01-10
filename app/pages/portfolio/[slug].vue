@@ -39,7 +39,14 @@
     <v-row>
       <v-col cols="12" md="7">
         <v-card elevation="2" class="mb-6">
-          <v-img :src="project.image" height="320" cover />
+          <img
+            :src="project.image"
+            :alt="project.title"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            style="width: 100%; height: 320px; object-fit: cover; display: block;"
+          >
         </v-card>
 
         <v-card elevation="2" class="pa-6 mb-6">
@@ -132,4 +139,3 @@ useHead(() => ({
   ]
 }))
 </script>
-
