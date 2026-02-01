@@ -1,15 +1,13 @@
-# Rules Workspace (ringkas & operasional)
+---
+name: Skill Project
+description: Every you change file or add file
+---
 
 ## Referensi & dokumentasi
 - Selalu gunakan Context7 saat membutuhkan pembuatan kode, langkah setup/konfigurasi, atau dokumentasi library/API (resolve Library ID lalu ambil dokumentasi otomatis).
 - Selalu gunakan Nuxt MCP saat membutuhkan pembuatan kode, langkah setup/konfigurasi, atau dokumentasi library/API.
 - Selalu gunakan Vuetify MCP saat membutuhkan pembuatan kode, langkah setup/konfigurasi, atau dokumentasi library/API.
 - Jika menggunakan model GLM 4.7, gunakan tools MCP zai-mcp-server untuk melihat image.
-
-## MCP Tools (GLM 4.7 only):
-- web-search-prime: untuk mencari informasi di internet
-- web-reader: untuk mengambil dan membaca konten dari URL
-- zread: untuk mencari dokumentasi, issues, dan commits di GitHub repository
 
 ## Testing & verifikasi
 - Perintah dasar menjalankan unit test: `npm run test:run`.

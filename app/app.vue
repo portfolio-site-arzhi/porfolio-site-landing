@@ -5,10 +5,39 @@
 </template>
 
 <script setup lang="ts">
+import { useTheme } from 'vuetify'
+import { resolveThemeColors } from './utils/siteConfig'
+
 const pageTransition = {
   name: 'page',
   mode: 'out-in'
 } as const
+
+const theme = useTheme()
+const { siteConfigs } = await useSiteConfigsReady()
+
+const applyThemeColors = (colors: { primary: string; secondary: string }) => {
+  const { primary, secondary } = colors
+
+  const light = theme.themes.value.light
+  if (light?.colors) {
+    light.colors.primary = primary
+    light.colors.secondary = secondary
+  }
+
+  const dark = theme.themes.value.dark
+  if (dark?.colors) {
+    dark.colors.primary = primary
+    dark.colors.secondary = secondary
+  }
+}
+
+const themeColors = computed(() => resolveThemeColors(siteConfigs.value.system))
+applyThemeColors(themeColors.value)
+
+watch(themeColors, (colors) => {
+  applyThemeColors(colors)
+})
 
 useHead({
   meta: [{ key: 'viewport', name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }]
@@ -16,6 +45,15 @@ useHead({
 </script>
 
 <style>
+html,
+body {
+  overflow-x: hidden;
+}
+
+.site-app-bar {
+  z-index: 3000;
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 180ms ease, transform 220ms ease;
@@ -80,5 +118,14 @@ useHead({
   .motion-in {
     animation: none;
   }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

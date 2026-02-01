@@ -1,6 +1,6 @@
 <template>
   <v-card class="pa-6 motion-lift" elevation="2">
-    <v-card-title class="text-h5 font-weight-bold mb-4">Education</v-card-title>
+    <v-card-title class="text-h5 font-weight-bold mb-4">{{ t('nav.education') }}</v-card-title>
 
     <v-list lines="three">
       <v-list-item
@@ -33,6 +33,8 @@
 
 <script setup lang="ts">
 import type { Education } from '../models/Education'
+
+const { t } = useI18n()
 
 defineProps<{
   items: Education[]

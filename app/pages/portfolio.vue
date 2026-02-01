@@ -3,9 +3,9 @@
     <NuxtPage v-if="isDetail" />
 
     <v-container v-else>
-      <h1 class="text-h3 font-weight-bold mb-8 text-center">Portfolio</h1>
+      <h1 class="text-h3 font-weight-bold mb-8 text-center">{{ t('portfolio.title') }}</h1>
       <p class="text-body-2 text-medium-emphasis mb-6 text-center">
-        Buka halaman detail untuk melihat peran, kontribusi, dan stack tiap project.
+        {{ t('portfolio.description') }}
       </p>
 
       <v-row>
@@ -19,7 +19,7 @@
         >
           <v-card
             elevation="2"
-            class="h-100 transition-swing motion-lift"
+            class="d-flex flex-column h-100 transition-swing motion-lift"
             role="link"
             tabindex="0"
             @click="navigateTo(`/portfolio/${project.slug}`)"
@@ -37,8 +37,8 @@
 
               <v-card-title>{{ project.title }}</v-card-title>
 
-              <v-card-text>
-                <p class="mb-4">{{ project.description }}</p>
+              <v-card-text class="flex-grow-1">
+                <p class="mb-4 line-clamp-2">{{ project.description }}</p>
                 <div>
                   <v-chip
                     v-for="tag in project.tags"
@@ -49,37 +49,17 @@
                     {{ tag }}
                   </v-chip>
                 </div>
-                <div class="mt-4">
-                  <v-chip
-                    v-if="!project.link"
-                    size="x-small"
-                    class="mr-2 mb-1"
-                    color="secondary"
-                    variant="tonal"
-                  >
-                    API-only / No UI
-                  </v-chip>
-                  <v-chip
-                    v-if="!project.github"
-                    size="x-small"
-                    class="mr-2 mb-1"
-                    color="grey"
-                    variant="tonal"
-                  >
-                    Private repo
-                  </v-chip>
-                </div>
               </v-card-text>
 
-              <v-card-actions>
+              <v-card-actions class="d-flex ga-2 portfolio-actions">
                 <v-btn
                   color="primary"
                   variant="tonal"
                   @click.stop="navigateTo(`/portfolio/${project.slug}`)"
                 >
-                  Details
+                  {{ t('portfolio.details') }}
                 </v-btn>
-                <v-spacer/>
+                <v-spacer />
                 <v-btn
                   v-if="project.github"
                   :href="project.github"
@@ -96,7 +76,7 @@
                   variant="text"
                   @click.stop
                 >
-                  Visit
+                  {{ t('project.live') }}
                 </v-btn>
               </v-card-actions>
           </v-card>
@@ -109,6 +89,8 @@
 <script setup lang="ts">
 const { projects } = useLandingData()
 const route = useRoute()
+const { t, locale } = useI18n()
+
 const isDetail = computed(() => {
   const slug = route.params.slug
   if (Array.isArray(slug)) return Boolean(slug[0])
@@ -119,10 +101,21 @@ useHead(() => {
   if (isDetail.value) return {}
 
   return {
-    title: 'Portfolio',
+    title: t('portfolio.title'),
+    htmlAttrs: {
+      lang: locale.value,
+      dir: 'ltr'
+    },
     meta: [
-      { name: 'description', content: 'Check out my latest projects and work.' }
+      { name: 'description', content: t('portfolio.description') }
     ]
   }
 })
 </script>
+
+<style scoped>
+.portfolio-actions {
+  min-height: 64px;
+  align-items: center;
+}
+</style>

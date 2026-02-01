@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <div class="d-flex align-center justify-space-between flex-wrap gap-2 mb-6">
-      <v-btn to="/portfolio" variant="text" prepend-icon="mdi-arrow-left">
-        Back
+      <v-btn :to="localePath('/portfolio')" variant="text" prepend-icon="mdi-arrow-left">
+        {{ t('nav.portfolio') }}
       </v-btn>
       <div class="d-flex align-center gap-2">
         <v-btn
@@ -12,7 +12,7 @@
           variant="text"
           prepend-icon="mdi-github"
         >
-          GitHub
+          {{ t('project.github') }}
         </v-btn>
         <v-btn
           v-if="project.link"
@@ -22,7 +22,7 @@
           variant="tonal"
           append-icon="mdi-open-in-new"
         >
-          Live
+          {{ t('project.live') }}
         </v-btn>
       </div>
     </div>
@@ -50,7 +50,7 @@
         </v-card>
 
         <v-card elevation="2" class="pa-6 mb-6">
-          <div class="text-h6 font-weight-bold mb-3">What I did</div>
+          <div class="text-h6 font-weight-bold mb-3">{{ t('project.contributions') }}</div>
           <ul class="pl-4">
             <li v-for="item in project.contributions" :key="item" class="mb-2">
               {{ item }}
@@ -59,7 +59,7 @@
         </v-card>
 
         <v-card v-if="project.outcomes?.length" elevation="2" class="pa-6">
-          <div class="text-h6 font-weight-bold mb-3">Outcomes</div>
+          <div class="text-h6 font-weight-bold mb-3">{{ t('project.outcomes') }}</div>
           <ul class="pl-4">
             <li v-for="item in project.outcomes" :key="item" class="mb-2">
               {{ item }}
@@ -70,43 +70,43 @@
 
       <v-col cols="12" md="5">
         <v-card elevation="2" class="pa-6 mb-6">
-          <div class="text-h6 font-weight-bold mb-3">Role</div>
+          <div class="text-h6 font-weight-bold mb-3">{{ t('project.role') }}</div>
           <div class="text-body-1">{{ project.role || '-' }}</div>
 
           <v-divider class="my-4" />
 
-          <div class="text-h6 font-weight-bold mb-3">Stack</div>
+          <div class="text-h6 font-weight-bold mb-3">{{ t('project.stack') }}</div>
           <div>
             <v-chip
-              v-for="t in project.stack"
-              :key="t"
+              v-for="tech in project.stack"
+              :key="tech"
               size="small"
               class="mr-2 mb-2"
               color="primary"
               variant="tonal"
             >
-              {{ t }}
+              {{ tech }}
             </v-chip>
           </div>
 
           <v-divider class="my-4" />
 
-          <div class="text-h6 font-weight-bold mb-3">Tags</div>
+          <div class="text-h6 font-weight-bold mb-3">{{ t('project.tags') }}</div>
           <div>
             <v-chip
-              v-for="t in project.tags"
-              :key="t"
+              v-for="tag in project.tags"
+              :key="tag"
               size="small"
               class="mr-2 mb-2"
               variant="outlined"
             >
-              {{ t }}
+              {{ tag }}
             </v-chip>
           </div>
         </v-card>
 
         <v-card v-if="project.notes" elevation="2" class="pa-6">
-          <div class="text-h6 font-weight-bold mb-3">Notes</div>
+          <div class="text-h6 font-weight-bold mb-3">{{ t('project.notes') }}</div>
           <div class="text-body-2 text-medium-emphasis">{{ project.notes }}</div>
         </v-card>
       </v-col>
@@ -119,6 +119,9 @@ import { getProjectBySlug } from '../../utils/projects'
 
 const { projects } = useLandingData()
 const route = useRoute()
+const { t, locale } = useI18n()
+const localePath = useLocalePath()
+
 const slug = computed(() => String(route.params.slug || ''))
 
 const project = computed(() => {
@@ -131,6 +134,10 @@ const project = computed(() => {
 
 useHead(() => ({
   title: project.value.title,
+  htmlAttrs: {
+    lang: locale.value,
+    dir: 'ltr'
+  },
   meta: [
     { name: 'description', content: project.value.description },
     { property: 'og:title', content: project.value.title },

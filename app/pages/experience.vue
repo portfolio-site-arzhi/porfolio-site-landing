@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-h3 font-weight-bold mb-8 text-center">Experience</h1>
+    <h1 class="text-h3 font-weight-bold mb-8 text-center">{{ t('experience.heading') }}</h1>
 
     <v-row justify="center">
       <v-col cols="12" md="10">
@@ -84,9 +84,14 @@
 
 <script setup lang="ts">
 const { experiences } = useLandingData()
+const { t, locale } = useI18n()
 
 useHead({
-  title: 'Experience',
+  title: t('nav.experience'),
+  htmlAttrs: {
+    lang: locale.value,
+    dir: 'ltr'
+  },
   meta: [{ name: 'description', content: 'My professional experience and responsibilities.' }]
 })
 </script>

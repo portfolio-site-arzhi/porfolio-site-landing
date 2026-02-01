@@ -1,6 +1,6 @@
 <template>
   <v-card class="pa-6 motion-lift" elevation="2">
-    <v-card-title class="text-h5 font-weight-bold mb-4">Courses & Certifications</v-card-title>
+    <v-card-title class="text-h5 font-weight-bold mb-4">{{ t('nav.certifications') }}</v-card-title>
 
     <v-list lines="three">
       <v-list-item
@@ -47,6 +47,8 @@
 
 <script setup lang="ts">
 import type { Certification } from '../models/Certification'
+
+const { t } = useI18n()
 
 defineProps<{
   items: Certification[]

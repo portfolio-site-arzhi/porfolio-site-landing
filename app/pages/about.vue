@@ -4,15 +4,11 @@
       <v-col cols="12" md="8">
         <v-card class="pa-6 motion-lift motion-in" elevation="2">
           <v-card-title class="text-h4 font-weight-bold mb-4">
-            About Me
+            {{ t('nav.about') }}
           </v-card-title>
           <v-card-text class="text-body-1">
             <p class="mb-4">
-              {{ profile.bio }}
-            </p>
-            <p>
-              I specialize in building modern web applications using the latest technologies.
-              My focus is on performance, accessibility, and user experience.
+              {{ aboutMe }}
             </p>
             
             <v-divider class="my-6"/>
@@ -21,7 +17,7 @@
 
             <v-divider class="my-6"/>
             
-            <h3 class="text-h5 mb-4">Connect with me</h3>
+            <h3 class="text-h5 mb-4">{{ t('about.connect') }}</h3>
             <div class="d-flex flex-wrap ga-2">
               <v-btn
                 v-for="social in profile.socials"
@@ -43,12 +39,17 @@
 </template>
 
 <script setup lang="ts">
-const { profile, skillGroups } = useLandingData()
+const { profile, skillGroups, aboutMe } = useLandingData()
+const { t, locale } = useI18n()
 
-useHead({
-  title: 'About',
+useHead(() => ({
+  title: t('nav.about'),
+  htmlAttrs: {
+    lang: locale.value,
+    dir: 'ltr'
+  },
   meta: [
-    { name: 'description', content: `About ${profile.value.name} - ${profile.value.role}` }
+    { name: 'description', content: aboutMe.value || `About ${profile.value.name} - ${profile.value.role}` }
   ]
-})
+}))
 </script>
