@@ -4,12 +4,6 @@
 - Selalu gunakan Context7 saat membutuhkan pembuatan kode, langkah setup/konfigurasi, atau dokumentasi library/API (resolve Library ID lalu ambil dokumentasi otomatis).
 - Selalu gunakan Nuxt MCP saat membutuhkan pembuatan kode, langkah setup/konfigurasi, atau dokumentasi library/API.
 - Selalu gunakan Vuetify MCP saat membutuhkan pembuatan kode, langkah setup/konfigurasi, atau dokumentasi library/API.
-- Jika menggunakan model GLM 4.7, gunakan tools MCP zai-mcp-server untuk melihat image.
-
-## MCP Tools (GLM 4.7 only):
-- web-search-prime: untuk mencari informasi di internet
-- web-reader: untuk mengambil dan membaca konten dari URL
-- zread: untuk mencari dokumentasi, issues, dan commits di GitHub repository
 
 ## Testing & verifikasi
 - Perintah dasar menjalankan unit test: `npm run test:run`.
@@ -30,3 +24,53 @@
 - Tampilan harus responsif di berbagai ukuran layar dan enak dilihat.
 - Pastikan aplikasi SEO-friendly.
 - Pastikan tidak ada error atau warning di console browser.
+
+## Struktur folder project
+```
+portfolio-site-landing/
+  app/
+    app.vue
+    components/
+    composables/
+    layouts/
+    models/
+    pages/
+    plugins/
+    utils/
+  i18n/
+  public/
+  tests/
+    utils/
+    e2e/
+  sample/
+  docker/
+    nginx/
+  .trae/
+    rules/
+    skills/
+  nuxt.config.ts
+  vitest.config.ts
+  eslint.config.mjs
+  package.json
+```
+
+- `app/`: source utama Nuxt (UI + logika).
+- `app/app.vue`: root app; setup global head/theme.
+- `app/pages/`: routing berbasis file (halaman publik).
+- `app/layouts/`: layout wrapper untuk halaman (navbar/footer, dsb).
+- `app/components/`: komponen UI reusable (section/partial).
+- `app/composables/`: reusable data fetching/state (SSR-friendly). Orkestrasi data lintas halaman di sini.
+- `app/models/`: type/interface untuk data domain (hindari define interface di komponen).
+- `app/utils/`: helper murni (formatting, mapping, transform).
+- `app/plugins/`: plugin Nuxt (client/server hook, side effects terkontrol).
+- `i18n/`: konfigurasi i18n (locale, message, strategy).
+- `public/`: aset statis yang diserve apa adanya (favicon, robots, sw, dsb).
+- `tests/utils/`: unit test untuk utilitas (Vitest).
+- `tests/e2e/`: e2e test berbasis `@nuxt/test-utils/e2e` (jalanin server Nuxt test).
+- `sample/`: dokumen/spec contoh untuk kebutuhan backend/CMS dan catatan teknis.
+- `docker/`: konfigurasi container & nginx untuk environment deploy.
+- `.trae/`: rules/skill internal untuk asistensi di IDE.
+- `nuxt.config.ts`: konfigurasi Nuxt (module, runtimeConfig, build).
+- `vitest.config.ts`: konfigurasi Vitest multi-project (unit & e2e).
+- `eslint.config.mjs`: konfigurasi linting.
+- `package.json`: scripts & dependency (lihat `test:run` unit-only dan `test:e2e`).

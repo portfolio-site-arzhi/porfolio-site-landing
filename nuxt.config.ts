@@ -23,6 +23,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: [
+        '/experience',
         '/portfolio/ecommerce-dashboard',
         '/portfolio/task-management-app',
         '/portfolio/portfolio-website',

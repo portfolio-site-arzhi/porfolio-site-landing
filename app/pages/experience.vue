@@ -12,13 +12,13 @@
               class="elevation-2 motion-lift motion-in"
               :style="{ '--enter-delay': `${index * 40}ms` }"
             >
-              <v-card-title>
+              <v-card-title class="experience-card-title">
                 <div class="text-caption text-primary mb-1">{{ exp.period }}</div>
-                <div class="text-h6">{{ exp.role }}</div>
-                <div class="text-subtitle-1 text-grey-darken-1">{{ exp.company }}</div>
+                <div class="text-h6 text-wrap text-break">{{ exp.role }}</div>
+                <div class="text-subtitle-1 text-grey-darken-1 text-wrap text-break">{{ exp.company }}</div>
               </v-card-title>
               <v-card-text>
-                <p class="mb-3">{{ exp.description }}</p>
+                <div class="mb-3 experience-description" v-html="exp.description" />
                 <div class="d-flex flex-wrap ga-2">
                   <v-chip
                     v-for="skill in exp.skills"
@@ -52,14 +52,12 @@
               </template>
 
               <v-card class="elevation-2 motion-lift">
-                <v-card-title class="text-h6">
-                  {{ exp.role }}
-                  <div class="text-subtitle-1 text-grey-darken-1">
-                    {{ exp.company }}
-                  </div>
+                <v-card-title class="experience-card-title">
+                  <div class="text-h6 text-wrap text-break">{{ exp.role }}</div>
+                  <div class="text-subtitle-1 text-grey-darken-1 text-wrap text-break">{{ exp.company }}</div>
                 </v-card-title>
                 <v-card-text>
-                  <p class="mb-2">{{ exp.description }}</p>
+                  <div class="mb-2 experience-description" v-html="exp.description" />
                   <div class="mt-2">
                     <v-chip
                       v-for="skill in exp.skills"
@@ -83,15 +81,42 @@
 </template>
 
 <script setup lang="ts">
-const { experiences } = useLandingData()
+import { stripHtmlToText } from '../utils/experienceHtml'
+
+const { experiences } = useLandingExperiences()
 const { t, locale } = useI18n()
 
-useHead({
+const metaDescription = computed(() => {
+  const first = experiences.value[0]
+  if (!first) return t('experience.heading')
+  const text = stripHtmlToText(first.description)
+  if (!text) return t('experience.heading')
+  return text.length > 160 ? `${text.slice(0, 157)}...` : text
+})
+
+useHead(() => ({
   title: t('nav.experience'),
   htmlAttrs: {
     lang: locale.value,
     dir: 'ltr'
   },
-  meta: [{ name: 'description', content: 'My professional experience and responsibilities.' }]
-})
+  meta: [{ name: 'description', content: metaDescription.value }]
+}))
 </script>
+
+<style scoped>
+.experience-card-title {
+  display: block;
+  white-space: normal;
+}
+
+.experience-description :deep(p) {
+  margin: 0 0 12px;
+}
+
+.experience-description :deep(ul),
+.experience-description :deep(ol) {
+  margin: 0 0 12px;
+  padding-left: 1.25rem;
+}
+</style>
