@@ -36,24 +36,7 @@ export const useLandingExperiences = () => {
   const runtimeConfig = useRuntimeConfig()
   const backendUrl = String(runtimeConfig.public.backendUrl || '').trim() || undefined
   const { locale } = useI18n()
-  const fallbackExperiences = useState<Experience[]>('experiences', () => [
-    {
-      id: 1,
-      role: 'Senior Frontend Developer',
-      company: 'Tech Solutions Inc.',
-      period: '2023 - Sekarang',
-      description: 'Memimpin migrasi arsitektur frontend ke Nuxt 3. Mentoring developer junior dan menetapkan standar kualitas kode.',
-      skills: ['Vue 3', 'Nuxt 3', 'TypeScript', 'Vitest']
-    },
-    {
-      id: 2,
-      role: 'Frontend Developer',
-      company: 'Digital Creative Agency',
-      period: '2021 - 2023',
-      description: 'Mengembangkan landing page yang performan tinggi dan platform e-commerce untuk berbagai klien.',
-      skills: ['Vue 2', 'SASS', 'JavaScript', 'Animation']
-    }
-  ])
+  const fallbackExperiences = useState<Experience[]>('experiences', () => [])
 
   const { data, pending, error, refresh } = useAsyncData<LandingExperiencesResponse | null>(
     'landing-experiences',
