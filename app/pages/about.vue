@@ -39,8 +39,14 @@
 </template>
 
 <script setup lang="ts">
-const { profile, skillGroups, aboutMe } = useLandingData()
+const { profile, aboutMe } = useLandingData()
+const { skillGroups } = useLandingSkills()
 const { t, locale } = useI18n()
+const skillsKeywords = computed(() => skillGroups.value
+  .flatMap((group) => group.skills)
+  .filter((skill) => typeof skill === 'string' && skill.trim().length > 0)
+  .slice(0, 20)
+  .join(', '))
 
 useHead(() => ({
   title: t('nav.about'),
@@ -49,7 +55,10 @@ useHead(() => ({
     dir: 'ltr'
   },
   meta: [
-    { name: 'description', content: aboutMe.value || `About ${profile.value.name} - ${profile.value.role}` }
+    { name: 'description', content: aboutMe.value || `About ${profile.value.name} - ${profile.value.role}` },
+    ...(skillsKeywords.value
+      ? [{ name: 'keywords', content: skillsKeywords.value }]
+      : [])
   ]
 }))
 </script>

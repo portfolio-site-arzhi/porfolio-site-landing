@@ -1,6 +1,5 @@
 import type { Profile } from '../models/Profile'
 import type { Experience } from '../models/Experience'
-import type { SkillGroup } from '../models/SkillGroup'
 import type { Education } from '../models/Education'
 import type { Certification } from '../models/Certification'
 import type { Project } from '../models/Project'
@@ -65,21 +64,6 @@ export const useLandingData = () => {
       }
     ]
   })
-
-  const skillGroups = useState<SkillGroup[]>('skillGroups', () => [
-    {
-      name: 'Frontend',
-      skills: ['Vue', 'Nuxt', 'TypeScript', 'Vite', 'SSR', 'SEO', 'A11y', 'Performance']
-    },
-    {
-      name: 'UI & Design Systems',
-      skills: ['Vuetify', 'CSS Architecture', 'Tokens', 'Responsive Design', 'Micro-interactions']
-    },
-    {
-      name: 'Tooling',
-      skills: ['Vitest', 'ESLint', 'CI', 'Monorepo Patterns', 'DX']
-    }
-  ])
 
   const educations = useState<Education[]>('educations', () => {
     if (!shouldSeedSampleLists) return []
@@ -186,7 +170,6 @@ export const useLandingData = () => {
     profile,
     aboutMe,
     experiences,
-    skillGroups,
     educations,
     certifications,
     projects,
