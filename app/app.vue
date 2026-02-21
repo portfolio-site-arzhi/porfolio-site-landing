@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { useTheme } from 'vuetify'
+import { resolveFailHardOnBackendError } from './utils/backendFailure'
 import { resolveThemeColors } from './utils/siteConfig'
 
 const pageTransition = {
@@ -14,7 +15,22 @@ const pageTransition = {
 } as const
 
 const theme = useTheme()
-const { siteConfigs } = await useSiteConfigsReady()
+const runtimeConfig = useRuntimeConfig()
+
+// Prefetch landing lists on initial SSR and keep them alive across client navigations.
+// This avoids re-fetching when users navigate away and back.
+useLandingExperiences()
+useLandingEducations()
+useLandingCertifications()
+
+const { siteConfigs, hasBackendError } = await useSiteConfigsReady()
+const failHardOnBackendError = computed(() =>
+  resolveFailHardOnBackendError(runtimeConfig.public.failHardOnBackendError, !import.meta.dev)
+)
+
+if (hasBackendError.value && failHardOnBackendError.value) {
+  throw createError({ statusCode: 503, statusMessage: 'Service Unavailable' })
+}
 
 const applyThemeColors = (colors: { primary: string; secondary: string }) => {
   const { primary, secondary } = colors

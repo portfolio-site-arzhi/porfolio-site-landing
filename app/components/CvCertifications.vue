@@ -33,11 +33,14 @@
             </v-btn>
           </div>
           <v-expand-transition>
-            <ul v-if="item.highlights?.length" class="mt-2 pl-4">
-              <li v-for="h in item.highlights" :key="h" class="text-body-2">
-                {{ h }}
-              </li>
-            </ul>
+            <div v-if="item.description || item.highlights?.length" class="mt-2">
+              <div v-if="item.description" class="certification-description" v-html="item.description" />
+              <ul v-if="item.highlights?.length" class="pl-4">
+                <li v-for="h in item.highlights" :key="h" class="text-body-2">
+                  {{ h }}
+                </li>
+              </ul>
+            </div>
           </v-expand-transition>
         </template>
       </v-list-item>
@@ -54,3 +57,21 @@ defineProps<{
   items: Certification[]
 }>()
 </script>
+
+<style scoped>
+.certification-description :deep(p) {
+  margin: 0 0 12px;
+}
+
+.certification-description :deep(ul),
+.certification-description :deep(ol) {
+  margin: 0 0 12px;
+  padding-left: 1.25rem;
+}
+
+.certification-description :deep(p:last-child),
+.certification-description :deep(ul:last-child),
+.certification-description :deep(ol:last-child) {
+  margin-bottom: 0;
+}
+</style>

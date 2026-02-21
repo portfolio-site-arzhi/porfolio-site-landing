@@ -60,6 +60,11 @@
       </v-navigation-drawer>
 
       <v-main class="bg-grey-lighten-4 flex-grow-1">
+        <v-container v-if="hasSiteConfigsBackendError" class="pt-6">
+          <v-alert type="warning" variant="tonal" border="start">
+            {{ t('errors.backendUnavailable') }}
+          </v-alert>
+        </v-container>
         <slot />
       </v-main>
 
@@ -90,7 +95,7 @@
 const drawer = ref(false)
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
-const { profile } = useLandingData()
+const { profile, hasSiteConfigsBackendError } = useLandingData()
 const { locale, locales, setLocale, t } = useI18n()
 const localePath = useLocalePath()
 
@@ -103,6 +108,12 @@ const brandTitle = computed(() => {
   if (fromProfile) return fromProfile
   return 'App'
 })
+
+useHead(() => ({
+  meta: [
+    ...(hasSiteConfigsBackendError.value ? [{ key: 'robots', name: 'robots', content: 'noindex, nofollow' }] : [])
+  ]
+}))
 
 watch(
   () => route.fullPath,

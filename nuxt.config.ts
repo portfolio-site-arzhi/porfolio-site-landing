@@ -1,10 +1,25 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const isTypecheckRun = process.argv.includes('typecheck')
+const isDevRun = process.argv.includes('dev')
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['vuetify/styles'],
+  buildDir: isTypecheckRun ? '.nuxt-typecheck' : '.nuxt',
   app: {
     head: {
+      link: [
+        ...(isDevRun
+          ? [
+              {
+                key: 'vuetify-styles-direct',
+                rel: 'stylesheet',
+                href: '/_nuxt/@id/vuetify/lib/styles/main.css?direct'
+              }
+            ]
+          : [])
+      ],
       style: [
         {
           key: 'layout-offset-fallback',
@@ -16,12 +31,19 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       backendUrl: process.env.NUXT_PUBLIC_BACKEND_URL || '',
-      siteTitle: process.env.NUXT_PUBLIC_SITE_TITLE || ''
+      siteTitle: process.env.NUXT_PUBLIC_SITE_TITLE || '',
+      failHardOnBackendError: process.env.NUXT_PUBLIC_FAIL_HARD_ON_BACKEND_ERROR || ''
     }
   },
-  modules: ['@nuxt/eslint', '@nuxt/test-utils/module', 'vuetify-nuxt-module', '@nuxtjs/i18n'],
+  modules: [
+    ...(isTypecheckRun ? [] : ['@nuxt/eslint']),
+    '@nuxt/test-utils/module',
+    'vuetify-nuxt-module',
+    '@nuxtjs/i18n'
+  ],
   nitro: {
     prerender: {
+      failOnError: false,
       routes: [
         '/experience',
         '/portfolio/ecommerce-dashboard',

@@ -45,6 +45,13 @@ export default defineI18nConfig(() => {
           live: 'Live Demo',
           apiOnly: 'API-only / Tanpa UI',
           privateRepo: 'Repo Privat'
+        },
+        errors: {
+          backendUnavailable: 'Data sedang tidak bisa dimuat karena backend bermasalah. Silakan coba lagi nanti.',
+          retry: 'Coba lagi',
+          backHome: 'Kembali ke Beranda',
+          errorTitle: 'Terjadi kesalahan',
+          errorDescription: 'Maaf, ada kendala pada layanan kami. Silakan coba lagi.'
         }
       },
       en: {
@@ -88,6 +95,13 @@ export default defineI18nConfig(() => {
           live: 'Live Demo',
           apiOnly: 'API-only / No UI',
           privateRepo: 'Private Repo'
+        },
+        errors: {
+          backendUnavailable: 'Data is temporarily unavailable because the backend is having an issue. Please try again later.',
+          retry: 'Try again',
+          backHome: 'Back to Home',
+          errorTitle: 'Something went wrong',
+          errorDescription: 'Sorry, we are having trouble right now. Please try again.'
         }
       }
     }

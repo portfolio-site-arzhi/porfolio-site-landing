@@ -4,5 +4,6 @@ export interface Education {
   program: string;
   period: string;
   location?: string;
+  description?: string;
   highlights?: string[];
 }

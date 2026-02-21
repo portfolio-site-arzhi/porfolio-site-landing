@@ -8,5 +8,12 @@ export default withNuxt(
     rules: {
       'vue/no-v-html': 'off'
     }
+  },
+  {
+    name: 'custom/allow-v-html-cv-components',
+    files: ['app/components/CvEducation.vue', 'app/components/CvCertifications.vue'],
+    rules: {
+      'vue/no-v-html': 'off'
+    }
   }
 )

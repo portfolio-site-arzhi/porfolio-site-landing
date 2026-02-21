@@ -7,19 +7,19 @@ import type { Project } from '../models/Project'
 import { buildSocialLinks, pickLocalizedText } from '../utils/siteConfig'
 
 export const useLandingData = () => {
+  const runtimeConfig = useRuntimeConfig()
   const { locale } = useI18n()
-  const { siteConfigs } = useSiteConfigs()
+  const { siteConfigs, hasBackendError: hasSiteConfigsBackendError } = useSiteConfigs()
+  const backendUrl = String(runtimeConfig.public.backendUrl || '').trim()
+  const shouldSeedSampleLists = import.meta.dev && backendUrl.length === 0
+  const siteTitle = String(runtimeConfig.public.siteTitle || '').trim()
 
   const profileFallback = useState<Profile>('profile', () => ({
-    name: 'Ardi',
-    role: 'Senior Frontend Developer',
-    bio: 'Berpengalaman membangun aplikasi web yang performan dan skalabel dengan teknologi modern.',
-    avatar: 'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairShortFlat&accessoriesType=Blank&hairColor=Black&facialHairType=BeardLight&clotheType=Hoodie&clotheColor=Black&eyeType=Happy&eyebrowType=Default&mouthType=Smile&skinColor=Light',
-    socials: [
-      { platform: 'GitHub', url: 'https://github.com', icon: 'mdi-github' },
-      { platform: 'LinkedIn', url: 'https://linkedin.com', icon: 'mdi-linkedin' },
-      { platform: 'Email', url: 'mailto:ardi@example.com', icon: 'mdi-email' }
-    ]
+    name: siteTitle || 'Your Name',
+    role: 'Frontend Developer',
+    bio: 'Tulis deskripsi singkat tentang Anda atau produk Anda.',
+    avatar: '/avatar-placeholder.svg',
+    socials: []
   }))
 
   const profile = computed<Profile>(() => {
@@ -44,24 +44,27 @@ export const useLandingData = () => {
     return pickLocalizedText(siteConfigs.value.about?.about_me, locale.value) ?? profile.value.bio
   })
 
-  const experiences = useState<Experience[]>('experiences', () => [
-    {
-      id: 1,
-      role: 'Senior Frontend Developer',
-      company: 'Tech Solutions Inc.',
-      period: '2023 - Sekarang',
-      description: 'Memimpin migrasi arsitektur frontend ke Nuxt 3. Mentoring developer junior dan menetapkan standar kualitas kode.',
-      skills: ['Vue 3', 'Nuxt 3', 'TypeScript', 'Vitest']
-    },
-    {
-      id: 2,
-      role: 'Frontend Developer',
-      company: 'Digital Creative Agency',
-      period: '2021 - 2023',
-      description: 'Mengembangkan landing page yang performan tinggi dan platform e-commerce untuk berbagai klien.',
-      skills: ['Vue 2', 'SASS', 'JavaScript', 'Animation']
-    }
-  ])
+  const experiences = useState<Experience[]>('experiences', () => {
+    if (!shouldSeedSampleLists) return []
+    return [
+      {
+        id: 1,
+        role: 'Senior Frontend Developer',
+        company: 'Tech Solutions Inc.',
+        period: '2023 - Sekarang',
+        description: 'Memimpin migrasi arsitektur frontend ke Nuxt 3. Mentoring developer junior dan menetapkan standar kualitas kode.',
+        skills: ['Vue 3', 'Nuxt 3', 'TypeScript', 'Vitest']
+      },
+      {
+        id: 2,
+        role: 'Frontend Developer',
+        company: 'Digital Creative Agency',
+        period: '2021 - 2023',
+        description: 'Mengembangkan landing page yang performan tinggi dan platform e-commerce untuk berbagai klien.',
+        skills: ['Vue 2', 'SASS', 'JavaScript', 'Animation']
+      }
+    ]
+  })
 
   const skillGroups = useState<SkillGroup[]>('skillGroups', () => [
     {
@@ -78,27 +81,33 @@ export const useLandingData = () => {
     }
   ])
 
-  const educations = useState<Education[]>('educations', () => [
-    {
-      id: 1,
-      institution: 'Universitas Anda',
-      program: 'S1 Teknik Informatika',
-      period: '2017 - 2021',
-      location: 'Indonesia',
-      highlights: ['Lulus dengan predikat cumlaude', 'Fokus pada rekayasa web']
-    }
-  ])
+  const educations = useState<Education[]>('educations', () => {
+    if (!shouldSeedSampleLists) return []
+    return [
+      {
+        id: 1,
+        institution: 'Universitas Anda',
+        program: 'S1 Teknik Informatika',
+        period: '2017 - 2021',
+        location: 'Indonesia',
+        highlights: ['Lulus dengan predikat cumlaude', 'Fokus pada rekayasa web']
+      }
+    ]
+  })
 
-  const certifications = useState<Certification[]>('certifications', () => [
-    {
-      id: 1,
-      title: 'Frontend Certification',
-      issuer: 'Nama Penerbit',
-      issuedAt: '2024',
-      credentialUrl: 'https://example.com',
-      highlights: ['Arsitektur frontend modern', 'Testing & performansi']
-    }
-  ])
+  const certifications = useState<Certification[]>('certifications', () => {
+    if (!shouldSeedSampleLists) return []
+    return [
+      {
+        id: 1,
+        title: 'Frontend Certification',
+        issuer: 'Nama Penerbit',
+        issuedAt: '2024',
+        credentialUrl: 'https://example.com',
+        highlights: ['Arsitektur frontend modern', 'Testing & performansi']
+      }
+    ]
+  })
 
   const projects = useState<Project[]>('projects', () => [
     {
@@ -141,7 +150,7 @@ export const useLandingData = () => {
       id: 3,
       slug: 'portfolio-website',
       title: 'Website Portfolio',
-      description: 'Website portfolio personal yang dibangun dengan Nuxt 3 dan Vuetify (Website ini!).',
+      description: 'Website portfolio modern yang dibangun dengan Nuxt dan Vuetify.',
       image: 'https://picsum.photos/seed/project3/600/400',
       tags: ['Nuxt 3', 'Vuetify', 'TypeScript'],
       role: 'Owner',
@@ -180,6 +189,7 @@ export const useLandingData = () => {
     skillGroups,
     educations,
     certifications,
-    projects
+    projects,
+    hasSiteConfigsBackendError
   }
 }

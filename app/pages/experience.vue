@@ -2,6 +2,15 @@
   <v-container>
     <h1 class="text-h3 font-weight-bold mb-8 text-center">{{ t('experience.heading') }}</h1>
 
+    <v-alert v-if="shouldShowInlineBackendAlert" type="warning" variant="tonal" border="start" class="mb-6">
+      <div class="d-flex align-center justify-space-between flex-wrap ga-3">
+        <div>{{ t('errors.backendUnavailable') }}</div>
+        <v-btn size="small" variant="outlined" :loading="pending" @click="refresh()">
+          {{ t('errors.retry') }}
+        </v-btn>
+      </div>
+    </v-alert>
+
     <v-row justify="center">
       <v-col cols="12" md="10">
         <div class="d-sm-none">
@@ -82,9 +91,27 @@
 
 <script setup lang="ts">
 import { stripHtmlToText } from '../utils/experienceHtml'
+import { resolveFailHardOnBackendError } from '../utils/backendFailure'
 
-const { experiences } = useLandingExperiences()
+const { experiences, hasBackendError, pending, refresh } = useLandingExperiences()
+const { hasBackendError: hasSiteConfigsBackendError } = useSiteConfigs()
 const { t, locale } = useI18n()
+const runtimeConfig = useRuntimeConfig()
+
+const failHardOnBackendError = computed(() =>
+  resolveFailHardOnBackendError(runtimeConfig.public.failHardOnBackendError, !import.meta.dev)
+)
+
+const shouldShowInlineBackendAlert = computed(() =>
+  hasBackendError.value && !hasSiteConfigsBackendError.value && !failHardOnBackendError.value
+)
+
+watchEffect(() => {
+  if (!import.meta.client) return
+  if (!failHardOnBackendError.value) return
+  if (!hasBackendError.value) return
+  showError(createError({ statusCode: 503, statusMessage: 'Service Unavailable' }))
+})
 
 const metaDescription = computed(() => {
   const first = experiences.value[0]
@@ -100,7 +127,10 @@ useHead(() => ({
     lang: locale.value,
     dir: 'ltr'
   },
-  meta: [{ name: 'description', content: metaDescription.value }]
+  meta: [
+    ...(hasBackendError.value ? [{ key: 'robots', name: 'robots', content: 'noindex, nofollow' }] : []),
+    { key: 'description', name: 'description', content: metaDescription.value }
+  ]
 }))
 </script>
 

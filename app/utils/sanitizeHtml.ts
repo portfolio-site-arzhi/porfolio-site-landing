@@ -1,5 +1,6 @@
 import type { IFrame, IOptions } from 'sanitize-html'
 import type { SanitizeHtmlFn } from '../models/SanitizeHtml'
+import type { LocalizedText } from '../models/SiteConfig'
 
 let sanitizeHtmlFn: SanitizeHtmlFn | null = null
 
@@ -51,4 +52,28 @@ export const defaultSanitizeHtmlOptions: IOptions = {
 export const sanitizeHtmlServer = async (html: string, options: IOptions = defaultSanitizeHtmlOptions): Promise<string> => {
   const sanitizeHtml = await getSanitizeHtmlFn()
   return sanitizeHtml(html, options).trim()
+}
+
+export const sanitizeLocalizedTextOrStringServer = async (
+  value: LocalizedText | string | null | undefined,
+  sanitize: (html: string) => Promise<string> = sanitizeHtmlServer
+): Promise<LocalizedText | string | null | undefined> => {
+  if (!value) return value
+
+  if (typeof value === 'string') {
+    return await sanitize(value)
+  }
+
+  if (typeof value === 'object') {
+    const idValue = typeof value.id === 'string' ? value.id : ''
+    const enValue = typeof value.en === 'string' ? value.en : ''
+
+    return {
+      ...value,
+      id: await sanitize(idValue),
+      en: await sanitize(enValue)
+    }
+  }
+
+  return value
 }

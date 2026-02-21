@@ -19,11 +19,14 @@
         <template #subtitle>
           <div class="text-body-2">{{ item.program }}<span v-if="item.location"> • {{ item.location }}</span></div>
           <v-expand-transition>
-            <ul v-if="item.highlights?.length" class="mt-2 pl-4">
-              <li v-for="h in item.highlights" :key="h" class="text-body-2">
-                {{ h }}
-              </li>
-            </ul>
+            <div v-if="item.description || item.highlights?.length" class="mt-2">
+              <div v-if="item.description" class="education-description" v-html="item.description" />
+              <ul v-if="item.highlights?.length" class="pl-4">
+                <li v-for="h in item.highlights" :key="h" class="text-body-2">
+                  {{ h }}
+                </li>
+              </ul>
+            </div>
           </v-expand-transition>
         </template>
       </v-list-item>
@@ -40,3 +43,21 @@ defineProps<{
   items: Education[]
 }>()
 </script>
+
+<style scoped>
+.education-description :deep(p) {
+  margin: 0 0 12px;
+}
+
+.education-description :deep(ul),
+.education-description :deep(ol) {
+  margin: 0 0 12px;
+  padding-left: 1.25rem;
+}
+
+.education-description :deep(p:last-child),
+.education-description :deep(ul:last-child),
+.education-description :deep(ol:last-child) {
+  margin-bottom: 0;
+}
+</style>
